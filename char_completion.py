@@ -1,8 +1,10 @@
+import re
 #This code was almost entirely written by bing chat 
 
 class Node:
     def __init__(self):
         self.children = {}
+        self.weight = 10
         self.is_end_of_word = False
 
 class PatriciaTree:
@@ -47,15 +49,23 @@ for word in array:
 import tkinter as tk
 
 def update_label(event):
-    text_in = text_box.get("1.0", tk.END).split()[-1]
-    guesses = tree.search(text_in)[0:5]
-    print(guesses)
-    count_label.config(text=f"Guessed words: {guesses}")
+    raw_text = text_box.get("1.0", tk.END)
+    if(len(raw_text) > 0):
+        text_in = raw_text.split()[-1]
+        guesses = tree.search(text_in)[0:3]
+        print(guesses)
+        #complete text using tab
+        if('\t' in raw_text):
+            updated_text = re.sub("\w*\t", guesses[0].rstrip('\n')+' ', raw_text)
+            text_box.delete(1.0, tk.END)
+            text_box.insert(1.0, updated_text)
+            text_box.delete('end-1c', 'end')
+        count_label.config(text=f"Guessed words: {guesses}")
 
 root = tk.Tk()
-root.title("Word Guesser")
+root.title("Word Guesser (tab to complete)")
 
-text_box = tk.Text(root)
+text_box = tk.Text(root, width = 100, height = 10, wrap="none")
 text_box.pack()
 
 count_label = tk.Label(root, text="Guessed Words: ")
