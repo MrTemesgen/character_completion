@@ -53,7 +53,7 @@ def update_label(event):
     count_label.config(text=f"Guessed words: {guesses}")
 
 root = tk.Tk()
-root.title("Character Counter")
+root.title("Word Guesser")
 
 text_box = tk.Text(root)
 text_box.pack()
